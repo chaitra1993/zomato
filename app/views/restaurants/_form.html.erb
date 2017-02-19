@@ -1,0 +1,66 @@
+
+<%= form_for @restaurant do |f|%>
+
+<%if @restaurant.errors.any? %>
+	<div class="alert alert-danger">
+	<h3>These errors prohibited the form from being saved:</h3>
+	<ul>
+		<%@project.errors.full_messages.each do |msg|%>
+			<li><%= msg%></li>
+		<%end%>
+	</ul>
+	</div>
+	<%end%>
+
+<div class="form-group">
+ 	<%=f.label :name%>
+	<%=f.text_field :name, class: "form-control" %>
+</div>
+
+<div class="form-group">
+	<%= f.label :city_id %>
+	<%= f.collection_select :city_id, City.all, :id, :name, {prompt: "Select city"}, {class: "form-control"} %>
+</div>
+
+
+<div class="form-group">
+	<%= f.label :location_id %>
+	<%= f.collection_select :location_id, Location.all, :id, :address, {prompt: "Select location"}, {class: "form-control"} %>
+</div>
+
+<div class="form-group">
+	<%= f.label :mobile %>
+	<%= f.text_field :mobile, class: "form-control" %>
+</div>
+
+
+<div class="form-group">
+	<%= f.label :cost_for_two %>
+	<%= f.text_field :cost_for_two, class: "form-control" %>
+</div>
+
+
+<%= f.label :cuisines %>
+	<%= f.collection_check_boxes :cuisine_ids, Cuisine.all, :id, :name do |c|%>
+	<div class="checkbox" %>
+	  <label>
+	    <%= c.check_box %>
+	    <%= c.object.name %>
+	  </label>
+	</div>
+	<% end %>
+
+<div class="form-group">
+	<%= f.collection_select :user_id, User.joins(:roles).where('roles.name = ?', "manager"), :id, :email, {prompt: "Select manager"}, {class: "form-control"} %>
+</div>
+
+<%= f.label :cover %> 
+<%= f.file_field :cover %><br/>
+
+<%=f.submit "Submit",class: "btn btn-success"%> or <%= link_to "Go Back", restaurants_path %>
+</div>
+
+<%end%>	
+
+
+

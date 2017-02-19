@@ -1,0 +1,9 @@
+
+<h2><%= @cuisine.name %></h2>
+
+
+<%= link_to "edit", edit_cuisine_path(@cuisine.id) %>
+
+<%= link_to "destroy", cuisine_path(@cuisine.id), method: :delete, data: {confirm: "Are you sure?"} %>
+
+<%= link_to "Back", cuisines_path %>

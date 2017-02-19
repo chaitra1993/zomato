@@ -1,0 +1,10 @@
+<h2>Add New Cuisine</h2>
+
+<%= form_for @cuisine do |f| %>
+
+	<%= f.label :name %><br/>
+	<%= f.text_field :name %><br/><br/>
+
+	<%= f.submit %>
+
+<% end %>

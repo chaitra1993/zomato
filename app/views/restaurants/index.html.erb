@@ -1,0 +1,58 @@
+
+<div class="page-header">
+  <h3>Listing Restaurants <small> Total: <%= @restaurants.size %></small>
+  <div class="pull-right">
+  <% if can? :create, @restaurants %>
+  <%= link_to new_restaurant_path, class: "btn btn-primary" do %>
+     <i  class="glyphicon glyphicon-plus"></i> Add Restaurant
+   <% end %>
+   <% end %>
+  </div>
+  </h3>
+
+   
+    <table class="table table-striped" id="restaurantsTable">
+      <thead>
+        <tr>
+          <th> # </th>
+          <th> Name </th>
+          <th> City </th>
+          <th> Location </th>
+          <th> Mobile </th>
+          <th>Cuisines</th>
+          <th> Show </th>
+          <th> Update </th>
+          <th> Delete </th>
+        </tr>
+      </thead>
+      <tbody>
+      <% count = 1 %>
+      <% @restaurants.each do |restaurant| %>
+      <tr>
+        <td><%= count %></td>
+        <td><%= restaurant.name %></td>
+        <td><%= restaurant.city.name %></td>
+        <td><%= restaurant.location.address %></td>
+        <td><%= restaurant.mobile %></td>
+        <td><%= restaurant.cuisines.pluck("name").join(",  ") %></td>
+        <td><%= link_to restaurant_path(restaurant), class: "btn btn-info" do %>
+          <i class="glyphicon glyphicon-eye-open"></i> Show
+          <% end %>
+        </td>
+        <% if can? :update, restaurant %>
+          <td><%= link_to edit_restaurant_path(restaurant), class: "btn btn-primary" do %>
+            <i  class="glyphicon glyphicon-edit"></i> Edit
+            <% end %>
+          </td>
+        <% end %>
+        <% if can? :destroy, restaurant %>
+          <td><%= link_to restaurant_path(restaurant), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" do %>
+            <i  class="glyphicon glyphicon-trash"></i>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% count += 1 %>
+     <% end %>
+    </tbody>
+   </table>

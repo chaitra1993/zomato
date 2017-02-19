@@ -1,0 +1,23 @@
+<div class="col-md-6">
+<h2>Add New Menu</h2>
+
+<%= form_for([@restaurant,@menu]) do |f| %>
+	<div class="form-group">
+		<%= f.label :name %>
+		<%= f.text_field :name, class: "form-control"%>
+	</div>
+
+	<div class="form-group">
+		<%= f.label :menutype_id %><br/>
+		<%= f.collection_select :menutype_id, Menutype.all, :id, :name, {prompt: "Select menu type"}, class: "form-control" %>
+	</div>
+
+	<div class="form-group">
+		<%= f.label :price %>
+		<%= f.text_field :price, class: "form-control"%>
+	</div>
+
+	<%=f.submit "Submit",class: "btn btn-success"%>
+
+<% end %>
+</div>

@@ -1,0 +1,142 @@
+<h2><%= @restaurant.name %></h2>
+
+<!-- Product thumbnail begins here --> 
+<div class="row">
+  <div class="col-md-9">
+  	<%= image_tag(@restaurant.cover.url) if @restaurant.cover %>
+  </div>
+</div>
+	    
+<%# image_tag(@restaurant.cover.url) if @restaurant.cover %>
+<div class="row">
+<div class="col-md-6">
+	<h3>Restaurant Details</h3>
+	    <b>Average Rating - <%= @avg %></b><br/><br/>
+		<b>City</b> - <%= @restaurant.city.name %><br/>
+		<b>Address</b> - <%= @restaurant.location.address %><br/>
+		<b>Mobile</b> - <%= @restaurant.mobile %><br/>
+		<b>Cost for two</b> - <%= @restaurant.cost_for_two %><br/>
+		<b>Cuisines</b> - <%= @restaurant.cuisines.pluck("name").join(", ") %><br/><br/>
+		<b>MENU</b><br/> 
+		  <b>Starters</b>
+			<ol>
+			  <% @restaurant.menus.where('menutype_id = ?', 1).each do |menu|%>
+			   <li> <%= menu.name %> - <%= menu.price %></li> 
+			  <% end %>
+			</ol>
+
+	      <b>Main Course</b>
+		    <ol>
+		  	  <% @restaurant.menus.where('menutype_id = ?', 2).each do |menu|%>
+			   <li> <%= menu.name %> - <%= menu.price %></li>
+		      <% end %>
+		    </ol>
+
+		  <b>Desserts</b>
+			<ol>
+		      <% @restaurant.menus.where('menutype_id = ?', 3).each do |menu|%>
+			    <li> <%= menu.name %> - <%= menu.price %></li>
+		      <% end %>
+	        </ol>	
+	      		
+						
+		<b>REVIEWS</b> - <ol><% @restaurant.reviews.each do |review| %>
+							
+			  					<li><%= review.comment %> - <%= review.user.email %> - <%= review.rating%>
+			  						<% if can? :destroy, review %>
+	  									<%= link_to "destroy", review_path(review), method: :delete, data: {confirm: "Are you sure?"} %>
+	  								<% end %>
+			  					</li>
+
+							
+						      <% end %>
+						    </ol>
+	</div>
+
+	<% if user_signed_in? %>
+	<% if can? :create, @menu %>
+	<div class="col-md-3">
+		<!-- Button trigger modal -->
+		<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+		  Add menu
+		</button>
+
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class ="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel"><b><%= @restaurant.name %></b> Add Menu</h4>
+		      </div>
+		      <div class="modal-body">
+				<%= form_for([@restaurant,@menu]) do |f| %>
+					<div class="form-group">
+						<%= f.label :name %>
+						<%= f.text_field :name, class: "form-control"%>
+					</div>
+
+					<div class="form-group">
+						<%= f.label :menutype_id %><br/>
+						<%= f.collection_select :menutype_id, Menutype.all, :id, :name, {prompt: "Select menu type"}, class: "form-control" %>
+					</div>
+
+					<div class="form-group">
+						<%= f.label :price %>
+						<%= f.text_field :price, class: "form-control"%>
+					</div>
+
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+				 <%= f.submit "Submit", class: "btn btn-success" %>
+
+				<% end %>
+				
+		      </div>
+		    </div>
+		  </div>
+		  <% end %>
+		</div><br/><br/>
+
+	  <%= form_for @review do |f| %>
+		  <% if can? :create, @review %>
+
+			<%= f.hidden_field :restaurant_id, value: @restaurant.id %>
+
+			<%= f.label :comment %>
+			<%= f.text_area :comment %><br/>
+
+			<%= f.label :rating%>
+		  	<%= f.radio_button :rating, "1"%> 1 
+		  	<%= f.radio_button :rating, "2"%> 2 
+		  	<%= f.radio_button :rating, "3"%> 3
+		  	<%= f.radio_button :rating, "4"%> 4
+		  	<%= f.radio_button :rating, "5"%> 5 <br/>
+
+			<%= f.submit "Add the comment" %>
+		<% end %>
+	<% end %> <br/>
+
+	
+</div>
+</div>
+
+
+<div class="col-md-6">
+	<% if can? :update, @restaurant %>
+		  <%= link_to edit_restaurant_path(@restaurant.id), class: "btn btn-primary" do %>
+		    <i  class="glyphicon glyphicon-edit"></i> Edit
+		  <% end %>
+		<% end %>
+
+
+		<% if can? :delete, @restaurant %>
+		  <%= link_to restaurant_path(@restaurant.id), method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-danger" do %>
+		    <i  class="glyphicon glyphicon-trash"></i> Destroy
+		    <% end %>
+		<% end %>
+	<% end %>
+		<%= link_to "Back", restaurants_path %>
+</div>

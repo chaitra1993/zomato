@@ -1,0 +1,37 @@
+<div class="col-md-6">
+<div class="page-header">
+  <h3>Listing Cuisines <small> Total: <%= @cuisines.size %></small>
+  <div class="pull-right">
+  <%= link_to new_cuisine_path, class: "btn btn-primary" do %>
+     <i  class="glyphicon glyphicon-plus"></i> Add Cuisine
+   <% end %>
+  </div>
+  </h3>
+</div>
+   
+    
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th> # </th>
+          <th> Name </th>
+          <th> Actions </th>
+        </tr>
+      </thead>
+      <tbody>
+
+      <% count = 1 %>
+      <% @cuisines.each do |cuisine| %>
+      <tr>
+        <td><%= count %></td>
+        <td><%= cuisine.name %></td>
+        <td><%= link_to cuisine_path(cuisine), class: "btn btn-info" do %>
+          <i class="glyphicon glyphicon-eye-open"></i> Show
+          <% end %>
+        </td>
+      </tr>
+    <% count += 1 %>
+     <% end %>
+    </tbody>
+   </table>
+</div>

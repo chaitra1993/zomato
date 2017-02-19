@@ -1,0 +1,4 @@
+<h2><%= @review.name %></h2>
+
+<%= link_to "destroy", review_path(@review.id), method: :delete, data: {confirm: "Are you sure?"} %>
+
